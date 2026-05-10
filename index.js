@@ -348,8 +348,20 @@ function splitMessage(text, maxLen) {
   return chunks;
 }
 
-// ── 11. Health Check ─────────────────────────────────────────
-app.get("/", (req, res) => res.send("KraftyBI Bot is running! Visit /dashboard for analytics."));
+// ── 11. Send Order Confirmation Follow-up ───────────────────
+async function sendOrderConfirmation(senderId, order) {
+  const msg =
+`✅ Order Confirmed!
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+👤 Name: ${order.name}
+🎉 Event: ${order.event}
+📅 Date: ${order.date}
+📍 Location: ${order.location}
+📞 Contact: ${order.contact}
+
+🧾 Order Summary:
+${(order.items || []).map(it => `• ${it.item} x${it.qty} — P${(it.price * it.qty).toLocaleString()}`).join("\n")}
+💰 Subtotal: P${(order.subtotal || 0).toLocaleString()}
+🚚 Delivery: Lalamove rate (from Minglanilla)
+
+We'll be in touch before your event! Thank you for choosing
